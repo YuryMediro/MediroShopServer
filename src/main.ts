@@ -1,18 +1,10 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { Handler, Context, Callback } from 'aws-lambda' // Vercel использует AWS-совместимый формат
+
 import * as cookieParser from 'cookie-parser'
-import { ExpressAdapter } from '@nestjs/platform-express'
-import * as express from 'express'
 
-let cachedServer: any
-
-async function bootstrapServer() {
-	const expressApp = express()
-	const app = await NestFactory.create(
-		AppModule,
-		new ExpressAdapter(expressApp)
-	)
+async function bootstrap() {
+	const app = await NestFactory.create(AppModule)
 
 	app.use(cookieParser())
 	app.enableCors({
@@ -21,17 +13,6 @@ async function bootstrapServer() {
 		exposedHeaders: ['set-cookie']
 	})
 
-	await app.init()
-	return expressApp
+	await app.listen(5000)
 }
-
-export const handler: Handler = async (
-	event: any,
-	context: Context,
-	callback: Callback
-) => {
-	if (!cachedServer) {
-		cachedServer = await bootstrapServer()
-	}
-	return cachedServer(event, context, callback)
-}
+bootstrap()
