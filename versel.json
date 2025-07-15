@@ -1,6 +1,6 @@
 {
 	"version": 2,
-
+	"outputDirectory": "dist",
 	"builds": [
 		{
 			"src": "src/main.ts",
@@ -15,3 +15,4 @@
 		}
 	]
 }
+ 
