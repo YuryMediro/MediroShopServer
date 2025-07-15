@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-
 import * as cookieParser from 'cookie-parser'
 
 async function bootstrap() {
@@ -13,6 +12,8 @@ async function bootstrap() {
 		exposedHeaders: ['set-cookie']
 	})
 
-	await app.listen(5000)
+	const PORT = process.env.PORT || 5000 // Добавляем поддержку Render
+	await app.listen(PORT, '0.0.0.0') // '0.0.0.0' обязательно для облака
+	console.log(`Server started on port ${PORT}`)
 }
 bootstrap()
